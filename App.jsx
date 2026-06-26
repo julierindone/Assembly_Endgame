@@ -1,4 +1,4 @@
-import React from "react"
+import { useState } from "react"
 import Banner from "./components/Banner"
 import Keyboard from "./components/Keyboard"
 import Languages from "./components/Languages"
@@ -9,12 +9,13 @@ export default function Hangman() {
 	// First load, and when new game button clicked.
 
 	// REMOVE
-	let word = "OSCAR"
+	const word = "oscar".toUpperCase().split('')
 
-	const [secretWord, setSecretWord] = React.useState(word)
+	const [secretWord, setSecretWord] = useState(word)
 
 	// only used on First load, and when new game button clicked? Or does it need to rerender every time a key is clicked? probably not
-	const [keyboardKeys, setKeyboardKeys] = React.useState(() => getNewKeyboard())
+	const [keyboardKeys, setKeyboardKeys] = useState(() => getNewKeyboard())
+	const [counter, setCounter] = useState(0)
 
 	function getNewKeyboard() {
 		const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -24,19 +25,31 @@ export default function Hangman() {
 			.map((key, index) => ({
 				...key,
 				value: alphabet[index],
-				inWord: (secretWord.split('').includes(alphabet[index]) ? true : false)
+				inWord: (secretWord.includes(alphabet[index]) ? true : false)
 			}))
 	}
 
 	function handleKeyClick(value) {
-		setKeyboardKeys(keyboardKeys.map(key => {
-			return key.value === value
-				? { ...key, isClicked: true }
-				: { ...key }
+		// keyboard stops activity once available tries are gone. will need to add in a
+		// winning game condition or create a gameOver variable like we had in tenzies.
+		if (counter < 8) {
+			setKeyboardKeys(keyboardKeys.map(key => {
+				if (key.value === value) {
+					!key.inWord && updateCounter()
+					return { ...key, isClicked: true }
+				}
+
+				return key.value === value
+					? { ...key, isClicked: true }
+					: { ...key }
+			}
+			))
 		}
-		))
 	}
 
+	function updateCounter() {
+		setCounter(count => count + 1)
+	}
 
 	return (
 		<>
@@ -47,7 +60,7 @@ export default function Hangman() {
 				</header>
 				<Banner />
 				<main>
-					<Languages />
+					<Languages counter={counter} />
 					<Word secretWord={secretWord} />
 					<Keyboard
 						keyboardKeys={keyboardKeys}

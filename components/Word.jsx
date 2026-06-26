@@ -1,7 +1,7 @@
 import React from "react";
 
-	export default function Word(props) {
-		const wordElement = props.secretWord.split('').map(letter => <p className="wordKey"><span>{letter}</span></p>)
+	export default function Word({secretWord}) {
+		const wordElement = secretWord.map(letter => <p className="wordKey"><span>{letter}</span></p>)
 
 		return (
 		<div className="word">

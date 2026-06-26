@@ -126,6 +126,15 @@ p {
     max-width: 320px;
     padding: 3px;
 
+    > span {
+        flex-shrink: 0;
+        font-weight: 600;
+        font-size: 0.7em;
+        border-radius: 4px;
+        padding: .4em .8em;
+        background-color: var(--off-white);
+    }
+
     .css, .typescript, .nodejs, .ruby, .assembly {
         color: var(--off-white);
     }
@@ -165,14 +174,6 @@ p {
     .assembly {
         background-color: var(--assembly);
     }
-}
-
-.language {
-    flex-shrink: 0;
-    font-weight: 600;
-    font-size: 0.7em;
-    border-radius: 4px;
-    padding: .4em .8em;
 }
 
 .word {
@@ -244,4 +245,8 @@ button.new-game-button {
     width: 220px;
     height: 100%;
     margin-top: 1.75rem;
+}
+
+.darken {
+    filter: brightness(.5);
 }

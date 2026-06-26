@@ -1,17 +1,15 @@
-import React from "react";
+export default function Languages({ counter }) {
+	const languages = ['HTML', 'CSS', 'JavaScript', 'React', 'TypeScript', 'Node.js', 'Python', 'Ruby', 'Assembly']
 
-export default function Languages() {
+	const languageEls = languages.map(language =>
+		<span className={`${language.replace('.', '').toLowerCase()}${languages.indexOf(language) + 1 <= counter ? " darken" : ""}`}>
+			{language}
+		</span>
+	)
+
 	return (
 		<div className="language-container">
-			<span className="language html">HTML</span>
-			<span className="language css">CSS</span>
-			<span className="language javascript">JavaScript</span>
-			<span className="language react">React</span>
-			<span className="language typescript">TypeScript</span>
-			<span className="language nodejs">Node.js</span>
-			<span className="language python">Python</span>
-			<span className="language ruby">Ruby</span>
-			<span className="language assembly">Assembly</span>
+			{languageEls}
 		</div>
 	)
 }
