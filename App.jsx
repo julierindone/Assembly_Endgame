@@ -10,12 +10,15 @@ export default function Hangman() {
 
 	// REMOVE
 	const word = "oscar".toUpperCase().split('')
-
-	const [secretWord, setSecretWord] = useState(word)
+	const [secretWord, setSecretWord] = useState(getNewSecretWord)
 
 	// only used on First load, and when new game button clicked? Or does it need to rerender every time a key is clicked? probably not
 	const [keyboardKeys, setKeyboardKeys] = useState(() => getNewKeyboard())
 	const [counter, setCounter] = useState(0)
+
+	function getNewSecretWord() {
+		return word.map(letter => ({ value: letter, isRevealed: false }))
+	}
 
 	function getNewKeyboard() {
 		const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -25,7 +28,7 @@ export default function Hangman() {
 			.map((key, index) => ({
 				...key,
 				value: alphabet[index],
-				inWord: (secretWord.includes(alphabet[index]) ? true : false)
+				inWord: (secretWord.some(letter => letter.value === alphabet[index]) ? true : false)
 			}))
 	}
 
@@ -42,8 +45,11 @@ export default function Hangman() {
 				return key.value === value
 					? { ...key, isClicked: true }
 					: { ...key }
-			}
-			))
+			}))
+
+			setSecretWord(secretWord.map(letter => {
+				return letter.value === value ? { ...letter, isRevealed: true } : { ...letter }
+			}))
 		}
 	}
 
@@ -56,7 +62,7 @@ export default function Hangman() {
 			<div className="container">
 				<header className="text">
 					<h1>Assembly: Endgame</h1>
-					<p className="subheader">Guess the word in under 8 attempts to keep the programming world safe from Assembly!</p>
+					<p className="subheader">Guess the word in fewer than 9 attempts to keep the programming world safe from Assembly!</p>
 				</header>
 				<Banner />
 				<main>
